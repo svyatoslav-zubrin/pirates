@@ -1,57 +1,46 @@
 import pygame
 from enum import Enum
 
-class Tile:
-    def __init__(self, size, position):
+
+class Tile(pygame.sprite.DirtySprite):
+    def __init__(self, size, position, cfg):
         """ Creates new Tile object
 
         Parameters:
             size (int, int): size of the tile (width, height), px
             position (int, int): position of the tile on the map (x, y)
-
+            cfg (TileCfg): config for the tile
         Returns:
             New Tile object.
         """
+        super(Tile, self).__init__()
+
+        # model
         self.size = size
         self.position = position
+
+        self.isSailable = cfg.isSailable()
+
         self.inactive_border_color = (0, 0, 0)
         self.active_border_color = (255, 0, 0)
-        self.isActive = False
-        self.isSailable = False
 
-    def configure(self, tile_cfg):
-        self.bg_color = tile_cfg.color()
-        self.isSailable = tile_cfg.isSailable()
+        # UI
+        self.rect = pygame.Rect(self.position[0] * self.size[0],
+                                self.position[1] * self.size[1],
+                                self.size[0],
+                                self.size[1])
+        self.image = pygame.Surface(self.rect.size)
+        self.image.fill(cfg.color())
 
-    def render(self, screen):
-        bg_rect = (self.position[0] * self.size[0],
-                   self.position[1] * self.size[1],
-                   self.size[0],
-                   self.size[1])
-        pygame.draw.rect(screen,
-                         self.bg_color,
-                         bg_rect)
+    def update(self):
+        self.__draw()
 
-        br_rect = (self.position[0] * self.size[0],
-                   self.position[1] * self.size[1],
-                   self.size[0] - 1,
-                   self.size[1] - 1)
-        pygame.draw.rect(screen,
-                         self.__border_color(),
+    def __draw(self):
+        br_rect = (0, 0, self.size[0] - 1, self.size[1] - 1)
+        pygame.draw.rect(self.image,
+                         self.inactive_border_color,
                          br_rect,
-                         self.__border_width())
-
-    def __border_color(self):
-        if self.isActive:
-            return self.active_border_color
-        else:
-            return self.inactive_border_color
-
-    def __border_width(self):
-        if self.isActive:
-            return 3
-        else:
-            return 1
+                         1)
 
 
 class TileType(Enum):
