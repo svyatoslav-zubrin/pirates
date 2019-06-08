@@ -1,30 +1,35 @@
 import pygame
-from model.ship import Ship, ShipType
+from pygame import Rect
 from model.map import Map
+
 
 class GameController:
     def __init__(self, size, title):
         self.size = size
         self.title = title
-        self.map_size = 20
+        self.map_grid_size = 22
+        self.map_rect = Rect((0, 0), (self.size[1], self.size[1]))
 
     def start(self):
         screen = pygame.display.set_mode(self.size)
         pygame.display.set_caption(self.title)
 
-        map = Map(self.size, self.map_size)
+        map = Map(self.map_rect, self.map_grid_size)
 
         running = True
         while running:
             map.render(screen)
-            pygame.display.flip()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    position = pygame.mouse.get_pos()
+                    if self.map_rect.collidepoint(position):
+                        map.handle_click(position)
+            pygame.display.flip()
 
 
-windowSize = (800, 800)
+windowSize = (1000, 800)
 
-game_controller = GameController(windowSize, 'Pirates')
+game_controller = GameController(windowSize, 'Пiрати')
 game_controller.start()
-

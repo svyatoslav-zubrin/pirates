@@ -1,7 +1,8 @@
 from .tile import Tile
 
+
 class Map:
-    def __init__(self, size, grid_size):
+    def __init__(self, rect, grid_size):
         """ Constructs new Map object.
 
         Parameters:
@@ -10,7 +11,7 @@ class Map:
         Returns:
             New map object
         """
-        self.size = size
+        self.size = rect.size
         self.grid_size = grid_size
 
         self.tiles = [[] for _ in range(grid_size)]
@@ -27,3 +28,10 @@ class Map:
         for tiles_line in self.tiles:
             for tile in tiles_line:
                 tile.render(screen)
+
+    def handle_click(self, position):
+        x = position[0] // (self.size[0] // self.grid_size)
+        y = position[1] // (self.size[1] // self.grid_size)
+        tile = self.tiles[x][y]
+        tile.isActive = True
+        # print("Will handle click at (", x, ",", y, ")")

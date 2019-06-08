@@ -1,5 +1,6 @@
 import pygame
 
+
 class Tile:
     def __init__(self, bg_color, size, position):
         """ Creates new Tile object
@@ -15,23 +16,36 @@ class Tile:
         self.bg_color = bg_color
         self.size = size
         self.position = position
-        self.border_color = (0, 0, 0)
+        self.inactive_border_color = (0, 0, 0)
+        self.active_border_color = (255, 0, 0)
+        self.isActive = False
 
     def render(self, screen):
-        top_left = (self.position[0] * self.size[0],
-                   self.position[1] * self.size[1])
-        bottom_right = ((self.position[0] + 1) * self.size[0],
-                        (self.position[1] + 1) * self.size[1])
+        bg_rect = (self.position[0] * self.size[0],
+                   self.position[1] * self.size[1],
+                   self.size[0],
+                   self.size[1])
         pygame.draw.rect(screen,
                          self.bg_color,
-                         (top_left[0],
-                          top_left[1],
-                          bottom_right[0],
-                          bottom_right[1]))
+                         bg_rect)
+
+        br_rect = (self.position[0] * self.size[0],
+                   self.position[1] * self.size[1],
+                   self.size[0] - 1,
+                   self.size[1] - 1)
         pygame.draw.rect(screen,
-                         self.border_color,
-                         (top_left[0],
-                          top_left[1],
-                          bottom_right[0],
-                          bottom_right[1]),
-                         1)
+                         self.__border_color(),
+                         br_rect,
+                         self.__border_width())
+
+    def __border_color(self):
+        if self.isActive:
+            return self.active_border_color
+        else:
+            return self.inactive_border_color
+
+    def __border_width(self):
+        if self.isActive:
+            return 3
+        else:
+            return 1
