@@ -1,24 +1,25 @@
 import pygame
-
+from enum import Enum
 
 class Tile:
-    def __init__(self, bg_color, size, position):
+    def __init__(self, size, position):
         """ Creates new Tile object
 
         Parameters:
-            bg_color (color): tile's background color
             size (int, int): size of the tile (width, height), px
             position (int, int): position of the tile on the map (x, y)
 
         Returns:
             New Tile object.
         """
-        self.bg_color = bg_color
         self.size = size
         self.position = position
         self.inactive_border_color = (0, 0, 0)
         self.active_border_color = (255, 0, 0)
         self.isActive = False
+
+    def configure(self, tile_cfg):
+        self.bg_color = tile_cfg.color()
 
     def render(self, screen):
         bg_rect = (self.position[0] * self.size[0],
@@ -49,3 +50,28 @@ class Tile:
             return 3
         else:
             return 1
+
+
+class TileType(Enum):
+    WATER = '.'
+    GRASS = 'g'
+    WHARF = 'w'
+    NEUTRAL_TRADE = 't'
+    NEUTRAL_MILITARY = 'm'
+
+
+class TileCfg:
+    def __init__(self, tile_id):
+        self.type = TileType(tile_id)
+
+    def color(self):
+        if self.type == TileType.WATER:
+            return (173, 216, 230)  # blue
+        if self.type == TileType.WHARF:
+            return (139, 69, 19)  # brown
+        if self.type == TileType.NEUTRAL_TRADE:
+            return (70, 130, 180)  # brown
+        if self.type == TileType.NEUTRAL_MILITARY:
+            return (70, 130, 180)  # brown
+        else:
+            return (34, 139, 34)  # green
