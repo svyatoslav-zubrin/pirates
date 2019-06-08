@@ -67,11 +67,11 @@ class TileCfg:
     def color(self):
         if self.type == TileType.WATER:
             return (173, 216, 230)  # blue
-        if self.type == TileType.WHARF:
+        elif self.type == TileType.WHARF:
             return (139, 69, 19)  # brown
-        if self.type == TileType.NEUTRAL_TRADE:
+        elif self.type == TileType.NEUTRAL_TRADE:
             return (70, 130, 180)  # brown
-        if self.type == TileType.NEUTRAL_MILITARY:
+        elif self.type == TileType.NEUTRAL_MILITARY:
             return (70, 130, 180)  # brown
-        else:
+        else:  # grass
             return (34, 139, 34)  # green
