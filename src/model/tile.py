@@ -17,9 +17,11 @@ class Tile:
         self.inactive_border_color = (0, 0, 0)
         self.active_border_color = (255, 0, 0)
         self.isActive = False
+        self.isSailable = False
 
     def configure(self, tile_cfg):
         self.bg_color = tile_cfg.color()
+        self.isSailable = tile_cfg.isSailable()
 
     def render(self, screen):
         bg_rect = (self.position[0] * self.size[0],
@@ -75,3 +77,9 @@ class TileCfg:
             return (70, 130, 180)  # brown
         else:  # grass
             return (34, 139, 34)  # green
+
+    def isSailable(self):
+        if self.type == TileType.GRASS:
+            return False
+        else:
+            return True

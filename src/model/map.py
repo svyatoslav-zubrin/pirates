@@ -62,12 +62,14 @@ class Map:
                 tile.render(screen)
 
     def handle_click(self, position):
-        self.activeTile.isActive = False
         x = position[0] // (self.size[0] // self.grid_size)
         y = position[1] // (self.size[1] // self.grid_size)
         tile = self.tiles[x][y]
-        tile.isActive = True
-        self.activeTile = tile
+
+        if tile.isSailable:
+            self.activeTile.isActive = False
+            tile.isActive = True
+            self.activeTile = tile
 
     def __configureTile(self, tile):
         tile_id = Initial_Board[tile.position[0]][tile.position[1]]
