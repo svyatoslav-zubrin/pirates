@@ -1,0 +1,21 @@
+{
+	"build_systems":
+	[
+		{
+			"name": "Pirates Game",
+			"shell_cmd": "python3 $project_path/src/game_controller.py"
+		},
+		{
+			"file_regex": "^[ ]*File \"(...*?)\", line ([0-9]*)",
+			"name": "Anaconda Python Builder",
+			"selector": "source.python",
+			"shell_cmd": "\"python\" -u \"$file\""
+		}
+	],
+	"folders":
+	[
+		{
+			"path": "."
+		}
+	]
+}
