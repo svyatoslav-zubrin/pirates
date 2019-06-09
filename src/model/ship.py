@@ -1,35 +1,35 @@
 import pygame
-from enum import Enum
+import os
+# from enum import Enum
 
-class Ship:
-    def __init__(self, type):
-        self.type = type
-        self.x = 0
-        self.y = 0
-        self.size = 10
 
-    def move(self, screen, cell_size, position):
-        self.x = position[0]
-        self.y = position[1]
-        self.render(screen, cell_size)
+class Ship(pygame.sprite.DirtySprite):
+    def __init__(self, size, position):
+        super(Ship, self).__init__()
 
-    def render(self, screen, cell_size):
-        pygame.draw.circle(screen,
-                           self._color(),
-                           (self.x * cell_size + cell_size // 2,
-                            self.y * cell_size + cell_size // 2),
-                           self.size, 1)
+        self.size = size
+        self.image = self.__image(self.size)
+        self.rect = pygame.Rect(position[0] * self.size[0],
+                                position[1] * self.size[1],
+                                self.size[0],
+                                self.size[1])
 
-    def _color(self):
-        if self.type is ShipType.PIRATE:
-            return (0, 255, 0)
-        elif self.type is ShipType.MILITARY:
-            return (255, 0, 0)
-        else:
-            return (0, 0, 255)
+    def move(self, position):
+        self.rect = pygame.Rect(position[0] * self.size[0],
+                                position[1] * self.size[1],
+                                self.size[0],
+                                self.size[1])
+        self.dirty = 1
 
-class ShipType(Enum):
-    PIRATE = 1
-    MILITARY = 2
-    MERCHANT = 3
+    def __image(self, size):
+        main_dir = os.path.split(os.path.abspath(__file__))[0]
+        path = os.path.join(main_dir,
+                            '../../assets/icons8-historic-ship-48.png')
+        image = pygame.image.load(path)
+        return pygame.transform.scale(image, size)
 
+
+# class ShipType(Enum):
+#     PIRATE = 1
+#     MILITARY = 2
+#     MERCHANT = 3
