@@ -90,7 +90,8 @@ class TileCfg:
             path = os.path.join(main_dir, '../../assets/water_light.png')
             image = pygame.image.load(path)
             return pygame.transform.scale(image, size)
-        elif self.type == TileType.NEUTRAL_TRADE or self.type == TileType.NEUTRAL_MILITARY:
+        elif (self.type == TileType.NEUTRAL_TRADE or
+                self.type == TileType.NEUTRAL_MILITARY):
             path = os.path.join(main_dir, '../../assets/water_dark.png')
             image = pygame.image.load(path)
             return pygame.transform.scale(image, size)

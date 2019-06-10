@@ -1,6 +1,7 @@
 import pygame
 from .tile import Tile, TileCfg
 from .ship import Ship
+from .player import Player
 
 Initial_Board = [
     ['g', 'g', '.', '.', '.', '.', '.', '.', 'g', 'g', 'g', 'g', 'g', 'g', '.', '.', '.', '.', '.', '.', 'g', 'g'],  # nopep8
@@ -29,6 +30,11 @@ Initial_Board = [
 
 
 class Map:
+    initial_ship_positions = [(1, 1),
+                              (20, 20),
+                              (1, 20),
+                              (20, 1)]
+
     def __init__(self, rect):
         """ Constructs new Map object.
 
@@ -58,13 +64,32 @@ class Map:
                 self.tiles_group.add(tile)
 
         # ships
-        self.ship = Ship(tile_size, (1, 1))
-        self.tiles_group.add(self.ship)
+        self.ships = {}
 
-    def handle_click(self, position):
+    def constructShips(self, players):
+        total = len(self.ships) + len(players)
+        if total >= len(Map.initial_ship_positions):
+            return False
+
+        for player in players:
+            ship = self.__constructShip(player, len(self.ships))
+            self.ships[player.name] = ship
+            self.tiles_group.add(ship)
+
+    def handle_click(self, position, player):
         y = position[1] // (self.size[1] // self.grid_size)
         x = position[0] // (self.size[0] // self.grid_size)
         tile = self.tiles[x][y]
 
         if tile.isSailable:
-            self.ship.move(tile.position)
+            ship = self.ships[player.name]
+            ship.move(tile.position)
+
+    def __tile_size(self):
+        return (self.size[0] // self.grid_size,
+                self.size[1] // self.grid_size)
+
+    def __constructShip(self, player, index):
+        index = len(self.ships)
+        pos = Map.initial_ship_positions[index]
+        return Ship(self.__tile_size(), pos, index)

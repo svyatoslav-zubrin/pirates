@@ -4,11 +4,16 @@ import os
 
 
 class Ship(pygame.sprite.DirtySprite):
-    def __init__(self, size, position):
+    ship_icons = [
+        "../../assets/icons8-historic-ship-48.png",
+        "../../assets/ship_from_kids_48.png"
+    ]
+
+    def __init__(self, size, position, player_number):
         super(Ship, self).__init__()
 
         self.size = size
-        self.image = self.__image(self.size)
+        self.image = self.__image(self.size, player_number)
         self.rect = pygame.Rect(position[0] * self.size[0],
                                 position[1] * self.size[1],
                                 self.size[0],
@@ -21,10 +26,10 @@ class Ship(pygame.sprite.DirtySprite):
                                 self.size[1])
         self.dirty = 1
 
-    def __image(self, size):
+    def __image(self, size, player_number):
         main_dir = os.path.split(os.path.abspath(__file__))[0]
-        path = os.path.join(main_dir,
-                            '../../assets/icons8-historic-ship-48.png')
+        image_name = Ship.ship_icons[player_number % len(Ship.ship_icons)]
+        path = os.path.join(main_dir, image_name)
         image = pygame.image.load(path)
         return pygame.transform.scale(image, size)
 
