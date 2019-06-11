@@ -15,6 +15,7 @@ class Dice(pygame.sprite.DirtySprite):
         self.value = random.randint(1, 6)
         self.image = self.__image(self.rect.size)
         self.dirty = 1
+        return self.value
 
     def reset(self):
         self.value = 0
